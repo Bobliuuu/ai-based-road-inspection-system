@@ -1,1 +1,1 @@
-# ai-based-road-detectino
+# ai-based-road-inspection-system

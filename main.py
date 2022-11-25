@@ -9,6 +9,7 @@ import geocoder
 import io
 import numpy as np
 import os
+import pandas as pd
 from PIL import Image, ImageDraw, ImageOps, ImageFont
 import shutil
 import streamlit as st
@@ -80,7 +81,8 @@ elif page == 'Image URL':
 else:
     with st.sidebar:
         folder = st.text_input('Enter name of folder:')
-output = st.sidebar.text_input('Enter output folder:', value = 'output')
+if page == 'Folder Upload':
+    output = st.sidebar.text_input('Enter output folder:', value = 'output')
 weights = ['Weights/Timm_ResNet152V2.h5',
            'Weights/El_Hassan_EfficientNetB0.hdf5',
            'Weights/Timm_MobileNetV2.h5',
@@ -196,9 +198,13 @@ def predict_multiple(folder, image_size):
     m_c = folium.Map(location=g.latlng)
     m_g = folium.Map(location=g.latlng)
     m_t = folium.Map(location=g.latlng)
-    with open('locations/locations.csv', newline='') as f:
-        reader = csv.reader(f)
+    if csv_upload is not None:
+        reader = csv.reader(csv_upload)
         locations = list(reader)
+    else: 
+        with open('locations/locations.csv', newline='') as f:
+            reader = csv.reader(f)
+            locations = list(reader)
     i = 0
     for filename in os.scandir(folder):
         if filename.is_file():
